@@ -39,7 +39,6 @@
       align-items: center;
       justify-content: center;
       padding: 24px 16px;
-      /* Subtle grid texture */
       background-image:
         linear-gradient(rgba(240,165,0,.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(240,165,0,.03) 1px, transparent 1px);
@@ -59,7 +58,6 @@
       overflow: hidden;
     }
 
-    /* Decorative corner accent */
     .card::before {
       content: '';
       position: absolute;
@@ -70,9 +68,7 @@
     }
 
     /* ─── Header ────────────────────────────────────────────── */
-    .header {
-      margin-bottom: 32px;
-    }
+    .header { margin-bottom: 32px; }
 
     .logo-row {
       display: flex;
@@ -81,7 +77,6 @@
       margin-bottom: 4px;
     }
 
-    /* Animated sound-wave icon */
     .wave-icon {
       display: flex;
       align-items: flex-end;
@@ -106,7 +101,6 @@
       50%       { transform: scaleY(.4); opacity: .5; }
     }
 
-    /* Pause wave when not speaking */
     .wave-icon.idle span { animation-play-state: paused; opacity: .35; }
 
     h1 {
@@ -248,14 +242,16 @@
     }
     select:focus { border-color: var(--accent); }
 
-    /* Speed Slider */
-    .speed-row {
-      grid-column: 1 / -1;
+    /* Loading state for voice select */
+    select.loading {
+      color: var(--muted);
+      font-style: italic;
     }
 
-    .slider-track {
-      position: relative;
-    }
+    /* Speed Slider */
+    .speed-row { grid-column: 1 / -1; }
+
+    .slider-track { position: relative; }
 
     input[type="range"] {
       width: 100%;
@@ -293,6 +289,11 @@
       font-size: .85rem;
       line-height: 1.65;
       display: none;
+      /* BUG 5 FIX: animation moved to .animate class so JS can re-trigger it
+         by removing the class, forcing a reflow, then re-adding it. */
+    }
+
+    #meaningBox.animate {
       animation: fadeUp .3s ease;
     }
 
@@ -324,11 +325,7 @@
       margin-bottom: 5px;
     }
 
-    .meaning-entry .def {
-      color: #b0b3c1;
-      font-size: .82rem;
-    }
-
+    .meaning-entry .def { color: #b0b3c1; font-size: .82rem; }
     .meaning-entry .example {
       color: var(--muted);
       font-size: .77rem;
@@ -336,7 +333,6 @@
       margin-top: 3px;
     }
 
-    /* Loading / error states */
     .m-loading { color: var(--muted); font-style: italic; }
     .m-error   { color: var(--danger); font-size: .8rem; }
 
@@ -388,7 +384,6 @@
       margin-bottom: 14px;
     }
 
-    /* Star rating system */
     .stars {
       display: flex;
       justify-content: center;
@@ -405,14 +400,12 @@
       flex-shrink: 0;
     }
 
-    /* Hover effect - scale and glow */
     .star:hover {
       transform: scale(1.15);
       color: var(--accent);
       text-shadow: 0 0 12px rgba(240,165,0,.6);
     }
 
-    /* Active (selected) star */
     .star.active {
       color: var(--accent);
       text-shadow: 0 0 16px rgba(240,165,0,.8);
@@ -420,12 +413,11 @@
     }
 
     @keyframes starPop {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.2); }
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.2); }
       100% { transform: scale(1); }
     }
 
-    /* Rating text display */
     .rating-display {
       font-size: .85rem;
       color: var(--text);
@@ -434,12 +426,8 @@
       transition: opacity .3s ease;
     }
 
-    .rating-display.hidden {
-      opacity: 0;
-      display: none;
-    }
+    .rating-display.hidden { opacity: 0; display: none; }
 
-    /* Rating action buttons */
     .rating-actions {
       display: flex;
       gap: 10px;
@@ -463,11 +451,8 @@
       box-shadow: 0 0 16px rgba(240,165,0,.3);
     }
 
-    .btn-submit-rating:active {
-      transform: scale(.96);
-    }
+    .btn-submit-rating:active { transform: scale(.96); }
 
-    /* Thank you message */
     .thank-you-message {
       font-size: .8rem;
       color: #3ecf6e;
@@ -475,13 +460,11 @@
       display: none;
     }
 
-    .thank-you-message.show {
-      display: block;
-    }
+    .thank-you-message.show { display: block; }
 
     @keyframes slideDown {
       from { opacity: 0; transform: translateY(-8px); }
-      to { opacity: 1; transform: translateY(0); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
     /* ─── Responsive ────────────────────────────────────────── */
@@ -503,13 +486,11 @@
   <!-- ── Header ─────────────────────────────────────────────── -->
   <div class="header">
     <div class="logo-row">
-      <!-- Animated sound-wave bars; "idle" class removed while speaking -->
       <div class="wave-icon idle" id="waveIcon">
         <span></span><span></span><span></span><span></span><span></span>
       </div>
       <h1>UCCARON</h1>
     </div>
-    <!-- <p class="subtitle">Browser Speech · Dictionary API</p> -->
   </div>
 
   <!-- ── Word Input ──────────────────────────────────────────── -->
@@ -523,7 +504,6 @@
       spellcheck="false"
       aria-label="English word"
     />
-    <!-- Clear button -->
     <button class="btn btn-clear" id="clearBtn" title="Clear" aria-label="Clear">✕</button>
   </div>
 
@@ -536,13 +516,13 @@
   <!-- ── Voice & Speed Controls ─────────────────────────────── -->
   <div class="controls">
 
-    <!-- Voice selector (populated from available TTS voices) -->
     <div class="control-group">
       <label for="voiceSelect">Voice</label>
-      <select id="voiceSelect" aria-label="Select voice"></select>
+      <select id="voiceSelect" aria-label="Select voice">
+        <option value="">Loading voices…</option>
+      </select>
     </div>
 
-    <!-- Accent / language selector -->
     <div class="control-group">
       <label for="accentSelect">Accent</label>
       <select id="accentSelect" aria-label="Select accent">
@@ -552,7 +532,6 @@
       </select>
     </div>
 
-    <!-- Speed slider -->
     <div class="control-group speed-row">
       <label>Speed — <span id="speedLabel">Normal</span></label>
       <div class="slider-track">
@@ -578,8 +557,7 @@
   <!-- ── Rating System ────────────────────────────────────────── -->
   <div class="rating-container">
     <span class="rating-label">Rate this app</span>
-    
-    <!-- Clickable stars (1-5) -->
+
     <div class="stars" id="starsContainer" aria-label="Rate from 1 to 5 stars">
       <span class="star" data-rating="1" role="button" tabindex="0">☆</span>
       <span class="star" data-rating="2" role="button" tabindex="0">☆</span>
@@ -588,17 +566,14 @@
       <span class="star" data-rating="5" role="button" tabindex="0">☆</span>
     </div>
 
-    <!-- Rating display text -->
     <div class="rating-display" id="ratingDisplay"></div>
 
-    <!-- Action buttons -->
     <div class="rating-actions">
       <button class="btn-submit-rating" id="submitRatingBtn" style="display: none;">
         ✓ Submit Rating
       </button>
     </div>
 
-    <!-- Thank you message -->
     <div class="thank-you-message" id="thankYouMessage">
       ✓ Thank you for rating!
     </div>
@@ -615,9 +590,6 @@
 
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════
-     JavaScript
-═══════════════════════════════════════════════════════════ -->
 <script>
   /* ── DOM refs ────────────────────────────────────────────── */
   const wordInput    = document.getElementById('wordInput');
@@ -634,61 +606,114 @@
   const waveIcon     = document.getElementById('waveIcon');
 
   /* ── Speech Synthesis setup ──────────────────────────────── */
-  const synth = window.speechSynthesis;
-  let voices  = [];   // will be filled once the browser loads voices
+  // BUG 6 FIX: Guard against browsers that don't support the Web Speech API
+  // (some mobile browsers, older Safari) — without this the entire script crashes.
+  const synth = window.speechSynthesis || null;
+  let voices  = [];
+
+  if (!synth) {
+    speakBtn.disabled    = true;
+    speakBtn.textContent = '✕ Speech not supported';
+    voiceSelect.innerHTML = '<option>Not supported</option>';
+    setStatus('error', 'Web Speech API not available in this browser');
+  }
 
   /**
-   * Populate the voice dropdown from available browser voices,
-   * filtered by the currently-selected accent/language.
+   * FIX: Robust voice loader.
+   *
+   * ROOT CAUSE OF BUG:
+   * The original code called populateVoices() immediately at page load,
+   * then set onvoiceschanged. On Chrome (and all Chromium-based browsers),
+   * getVoices() returns an EMPTY ARRAY on the first synchronous call —
+   * voices are loaded asynchronously. The onvoiceschanged event fires once
+   * they're ready. On the developer's machine the voices were already cached,
+   * so the synchronous call happened to return them — hiding the bug.
+   *
+   * FIX STRATEGY:
+   * 1. Register onvoiceschanged BEFORE any getVoices() call.
+   * 2. After registering, attempt an immediate load (works on Firefox/Safari
+   *    which return voices synchronously).
+   * 3. Add a polling fallback: some browsers/environments never fire
+   *    onvoiceschanged reliably. Poll every 100 ms for up to 3 seconds,
+   *    stopping as soon as voices appear.
    */
   function populateVoices() {
-    voices = synth.getVoices();
-    const lang = accentSelect.value;
+    const available = synth.getVoices();
 
-    // Keep only voices matching the selected language
+    // Guard: don't render an empty list — wait for the next tick/event
+    if (available.length === 0) return;
+
+    voices = available;
+
+    const lang     = accentSelect.value;
     const filtered = voices.filter(v => v.lang.startsWith(lang.split('-')[0]));
-    // Prefer exact locale match first, then broader match
-    const sorted = [
+    const sorted   = [
       ...filtered.filter(v => v.lang === lang),
       ...filtered.filter(v => v.lang !== lang),
     ];
 
     voiceSelect.innerHTML = '';
+    voiceSelect.classList.remove('loading');
 
-    if (sorted.length === 0) {
-      // Fallback: show all English voices
-      const allEn = voices.filter(v => v.lang.startsWith('en'));
-      allEn.forEach(addVoiceOption);
+    const listToRender = sorted.length > 0
+      ? sorted
+      : voices.filter(v => v.lang.startsWith('en')); // broad English fallback
+
+    if (listToRender.length === 0) {
+      // Last-resort: show every available voice
+      voices.forEach(addVoiceOption);
     } else {
-      sorted.forEach(addVoiceOption);
+      listToRender.forEach(addVoiceOption);
     }
 
     setStatus('ready', 'Ready to speak');
   }
 
-  /** Add a single <option> to the voice dropdown */
   function addVoiceOption(v) {
-    const opt = document.createElement('option');
-    opt.value = v.name;
-    // Show name + locale
+    const opt       = document.createElement('option');
+    opt.value       = v.name;
     opt.textContent = `${v.name} (${v.lang})`;
     voiceSelect.appendChild(opt);
   }
 
-  // Chrome loads voices asynchronously
-  if (synth.onvoiceschanged !== undefined) {
-    synth.onvoiceschanged = populateVoices;
+  /**
+   * FIX: Register the event handler FIRST, then attempt synchronous load,
+   * then start the polling fallback.
+   */
+  function initVoices() {
+    voiceSelect.classList.add('loading');
+
+    // Step 1 — hook the event before anything else
+    if (typeof synth.onvoiceschanged !== 'undefined') {
+      synth.onvoiceschanged = populateVoices;
+    }
+
+    // Step 2 — attempt immediate load (Firefox / Safari)
+    populateVoices();
+
+    // Step 3 — polling fallback (handles Chrome & edge cases where the
+    //           event fires before our handler was registered, or not at all)
+    let attempts = 0;
+    const MAX_ATTEMPTS = 30; // 30 × 100 ms = 3 s
+    const poll = setInterval(() => {
+      attempts++;
+      if (voices.length > 0 || attempts >= MAX_ATTEMPTS) {
+        clearInterval(poll);
+        return;
+      }
+      populateVoices();
+    }, 100);
   }
-  // Firefox / Safari return voices synchronously
-  populateVoices();
+
+  if (synth) initVoices();
 
   /* ── Speed slider label ──────────────────────────────────── */
   speedRange.addEventListener('input', () => {
     const val = parseFloat(speedRange.value);
-    if      (val <= 0.6)  speedLabel.textContent = 'Slow';
-    else if (val <= 1.2)  speedLabel.textContent = 'Normal';
-    else if (val <= 1.5)  speedLabel.textContent = 'Fast';
-    else                  speedLabel.textContent = 'Very Fast';
+    if      (val <= 0.6) speedLabel.textContent = 'Slow';
+    else if (val <= 1.2) speedLabel.textContent = 'Normal';
+    else if (val <= 1.5) speedLabel.textContent = 'Fast';
+    else                 speedLabel.textContent = 'Very Fast';
   });
 
   /* ── Accent change → refresh voice list ─────────────────── */
@@ -696,8 +721,7 @@
 
   /* ── Word input: live preview ────────────────────────────── */
   wordInput.addEventListener('input', () => {
-    const w = wordInput.value.trim();
-    wordShown.textContent = w || '—';
+    wordShown.textContent = wordInput.value.trim() || '—';
   });
 
   /* ── Press Enter → speak ─────────────────────────────────── */
@@ -707,7 +731,7 @@
 
   /* ── Clear button ────────────────────────────────────────── */
   clearBtn.addEventListener('click', () => {
-    wordInput.value   = '';
+    wordInput.value       = '';
     wordShown.textContent = '—';
     meaningBox.style.display = 'none';
     synth.cancel();
@@ -718,11 +742,9 @@
   /* ── Speak button ────────────────────────────────────────── */
   speakBtn.addEventListener('click', speakWord);
 
-  /**
-   * Core function: reads the word aloud via Speech Synthesis API,
-   * then fetches its meaning from the free Dictionary API.
-   */
   function speakWord() {
+    if (!synth) return;
+
     const word = wordInput.value.trim();
     if (!word) {
       setStatus('error', 'Please type a word first');
@@ -730,151 +752,195 @@
       return;
     }
 
-    // Stop any ongoing speech
     synth.cancel();
 
-    // Build utterance
-    const utterance = new SpeechSynthesisUtterance(word);
-    utterance.rate  = parseFloat(speedRange.value);  // speed from slider
-    utterance.lang  = accentSelect.value;             // accent
+    // BUG 2 FIX: Chrome pauses the synth engine when the tab loses focus.
+    // Calling resume() before speak() unblocks it so onstart/onend fire reliably.
+    synth.resume();
 
-    // Find & assign the selected voice object
-    const selectedVoiceName = voiceSelect.value;
-    const voiceObj = voices.find(v => v.name === selectedVoiceName);
+    const utterance  = new SpeechSynthesisUtterance(word);
+    utterance.rate   = parseFloat(speedRange.value);
+    utterance.lang   = accentSelect.value;
+
+    const voiceObj = voices.find(v => v.name === voiceSelect.value);
     if (voiceObj) utterance.voice = voiceObj;
 
-    // Lifecycle events
+    // BUG 2 FIX: Safety watchdog — if onend never fires (Chrome bug),
+    // re-enable the button after a generous timeout so the UI doesn't lock up.
+    let watchdog;
+
     utterance.onstart = () => {
       setStatus('speaking', `Speaking "${word}"…`);
       waveIcon.classList.remove('idle');
       speakBtn.disabled = true;
+      watchdog = setTimeout(() => {
+        // Force-reset if the engine silently died
+        waveIcon.classList.add('idle');
+        speakBtn.disabled = false;
+        setStatus('ready', 'Ready to speak');
+      }, 10000); // 10 s ceiling — more than enough for any single word
     };
 
     utterance.onend = () => {
+      clearTimeout(watchdog);
       setStatus('ready', 'Done');
       waveIcon.classList.add('idle');
       speakBtn.disabled = false;
     };
 
     utterance.onerror = (e) => {
+      clearTimeout(watchdog);
+      // 'interrupted' fires when synth.cancel() is called mid-speech (e.g. user
+      // clicks Speak again) — that's expected, not a real error.
+      if (e.error === 'interrupted') return;
       setStatus('error', `Speech error: ${e.error}`);
       waveIcon.classList.add('idle');
       speakBtn.disabled = false;
     };
 
     synth.speak(utterance);
-
-    // Also fetch meaning from free Dictionary API
     fetchMeaning(word);
   }
 
   /* ── Status helper ───────────────────────────────────────── */
   function setStatus(state, msg) {
     statusText.textContent = msg;
-    statusDot.className    = 'status-dot';       // reset
+    statusDot.className    = 'status-dot';
     if (state === 'speaking') statusDot.classList.add('speaking');
     if (state === 'ready')    statusDot.classList.add('ready');
-    // 'idle' and 'error' get no extra class (grey dot)
   }
 
-  /* ── Dictionary API (dictionaryapi.dev) ──────────────────── */
-  /**
-   * Fetches word definition from the free public Dictionary API.
-   * Displays phonetic, part-of-speech, definitions, and an example.
-   */
+  /* ── Dictionary API ──────────────────────────────────────── */
+
+  /** Helper: create an element, assign a class, set its text, return it. */
+  function el(tag, className, text) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
+  // BUG 1 FIX: Track the active fetch so we can abort it if a new word is
+  // looked up before the previous request completes. Without this, a slow
+  // response for an earlier word can overwrite the result for the current one.
+  let activeFetchController = null;
+
   async function fetchMeaning(word) {
+    // Cancel any in-flight request
+    if (activeFetchController) activeFetchController.abort();
+    activeFetchController = new AbortController();
+    const signal = activeFetchController.signal;
+
+    // BUG 5 FIX: Re-trigger the fadeUp animation on every lookup.
+    // Simply toggling display: none → block doesn't restart a CSS animation
+    // because the element stays in the DOM. Forcing a reflow between removing
+    // and re-adding the class resets the animation timeline.
+    meaningBox.style.display = 'none';
+    meaningBox.classList.remove('animate');
+    // eslint-disable-next-line no-unused-expressions
+    meaningBox.offsetHeight; // force reflow
     meaningBox.style.display = 'block';
-    meaningBox.innerHTML = `<p class="m-loading">Looking up "${word}"…</p>`;
+    meaningBox.classList.add('animate');
+
+    meaningBox.replaceChildren(el('p', 'm-loading', `Looking up "${word}"…`));
 
     try {
-      const res  = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
+      const res  = await fetch(
+        `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`,
+        { signal }
+      );
       if (!res.ok) throw new Error('not_found');
       const data = await res.json();
 
       const entry    = data[0];
       const phonetic = entry.phonetic || (entry.phonetics.find(p => p.text)?.text) || '';
 
-      let html = `
-        <div class="m-word">${entry.word}</div>
-        ${phonetic ? `<div class="m-phonetic">${phonetic}</div>` : ''}
-      `;
+      const fragment = document.createDocumentFragment();
+      fragment.appendChild(el('div', 'm-word',     entry.word));
+      if (phonetic) fragment.appendChild(el('div', 'm-phonetic', phonetic));
 
-      // Show up to 3 meanings (different parts of speech)
-      const meanings = entry.meanings.slice(0, 3);
-      meanings.forEach(m => {
-        const def = m.definitions[0];
-        html += `
-          <div class="meaning-entry">
-            <span class="pos">${m.partOfSpeech}</span>
-            <div class="def">${def.definition}</div>
-            ${def.example ? `<div class="example">"${def.example}"</div>` : ''}
-          </div>
-        `;
+      entry.meanings.slice(0, 3).forEach(m => {
+        const def     = m.definitions[0];
+        const entryEl = el('div', 'meaning-entry');
+        entryEl.appendChild(el('span', 'pos', m.partOfSpeech));
+        entryEl.appendChild(el('div',  'def', def.definition));
+        if (def.example) entryEl.appendChild(el('div', 'example', `"${def.example}"`));
+        fragment.appendChild(entryEl);
       });
 
-      meaningBox.innerHTML = html;
+      meaningBox.replaceChildren(fragment);
 
     } catch (err) {
+      // AbortError just means a newer request took over — not a real error
+      if (err.name === 'AbortError') return;
+
+      const p = el('p', 'm-error');
       if (err.message === 'not_found') {
-        meaningBox.innerHTML = `<p class="m-error">No definition found for "<strong>${word}</strong>".</p>`;
+        p.appendChild(document.createTextNode('No definition found for "'));
+        p.appendChild(el('strong', null, word));
+        p.appendChild(document.createTextNode('".'));
       } else {
-        meaningBox.innerHTML = `<p class="m-error">Could not load definition (check your connection).</p>`;
+        p.textContent = 'Could not load definition (check your connection).';
       }
+      meaningBox.replaceChildren(p);
     }
   }
 
   /* ── Initial status ──────────────────────────────────────── */
   setStatus('idle', 'Enter a word to get started');
 
-  /* ═════════════════════════════════════════════════════════════
+  /* ═══════════════════════════════════════════════════════════
      RATING SYSTEM
-  ═════════════════════════════════════════════════════════════ */
-
-  // DOM refs for rating system
-  const starsContainer    = document.getElementById('starsContainer');
+  ═══════════════════════════════════════════════════════════ */
+  const starsContainer   = document.getElementById('starsContainer');
   const stars            = document.querySelectorAll('.star');
   const ratingDisplay    = document.getElementById('ratingDisplay');
   const submitRatingBtn  = document.getElementById('submitRatingBtn');
   const thankYouMessage  = document.getElementById('thankYouMessage');
 
-  // Track current rating (0 = no rating yet)
   let currentRating = 0;
   const STORAGE_KEY = 'uccaron_rating';
 
-  /**
-   * Load the saved rating from localStorage and display it.
-   * Runs on page load to restore user's previous rating.
-   */
+  // BUG 4 FIX: localStorage throws SecurityError in private/incognito mode on
+  // some browsers. Wrap all access in helpers that silently degrade.
+  function storageGet(key) {
+    try { return localStorage.getItem(key); } catch { return null; }
+  }
+  function storageSet(key, val) {
+    try { localStorage.setItem(key, val); } catch { /* silently ignore */ }
+  }
+
   function loadRating() {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      currentRating = parseInt(saved, 10);
+    const saved = storageGet(STORAGE_KEY);
+    if (!saved) return;
+
+    // BUG 3 FIX: Validate before using. parseInt returns NaN for corrupted data;
+    // NaN comparisons always return false, silently breaking all star logic.
+    const parsed = parseInt(saved, 10);
+    if (Number.isInteger(parsed) && parsed >= 1 && parsed <= 5) {
+      currentRating = parsed;
       updateStarDisplay();
       updateRatingText();
     }
   }
 
-  /**
-   * Update the star visual display.
-   * Filled stars (★) for rated count, empty stars (☆) for the rest.
-   */
+  function saveRating() {
+    if (currentRating > 0) storageSet(STORAGE_KEY, currentRating.toString());
+  }
+
   function updateStarDisplay() {
     stars.forEach((star, index) => {
       const starNum = index + 1;
       if (starNum <= currentRating) {
-        star.textContent = '★'; // Filled star
+        star.textContent = '★';
         star.classList.add('active');
       } else {
-        star.textContent = '☆'; // Empty star
+        star.textContent = '☆';
         star.classList.remove('active');
       }
     });
   }
 
-  /**
-   * Update the text display showing the current rating.
-   * Shows "You rated: X/5" or empty if no rating.
-   */
   function updateRatingText() {
     if (currentRating > 0) {
       ratingDisplay.textContent = `You rated: ${currentRating}/5`;
@@ -888,113 +954,2081 @@
     }
   }
 
-  /**
-   * Save the rating to localStorage.
-   * Persists the rating so it's still there after page reload.
-   */
-  function saveRating() {
-    if (currentRating > 0) {
-      localStorage.setItem(STORAGE_KEY, currentRating.toString());
-    }
-  }
-
-  /**
-   * Handle star click events.
-   * Sets the rating and updates the display.
-   */
   function handleStarClick(e) {
     const star = e.target.closest('.star');
     if (!star) return;
-
-    const rating = parseInt(star.dataset.rating, 10);
-    currentRating = rating;
+    currentRating = parseInt(star.dataset.rating, 10);
     updateStarDisplay();
     updateRatingText();
-    // Don't save yet - user can still change their mind
   }
 
-  /**
-   * Handle star hover effects for preview.
-   * Shows what rating the user would get if they click.
-   */
   function handleStarHover(e) {
     const star = e.target.closest('.star');
     if (!star) return;
-
     const hoverRating = parseInt(star.dataset.rating, 10);
-    // Preview: highlight stars up to the hovered star
     stars.forEach((s, index) => {
-      const starNum = index + 1;
-      if (starNum <= hoverRating) {
-        s.textContent = '★';
-      } else {
-        s.textContent = currentRating >= starNum ? '★' : '☆';
-      }
+      s.textContent = (index + 1) <= hoverRating ? '★'
+        : currentRating >= (index + 1) ? '★' : '☆';
     });
   }
 
-  /**
-   * Restore star display after hover ends.
-   */
-  function handleStarLeave() {
-    updateStarDisplay();
-  }
+  function handleStarLeave() { updateStarDisplay(); }
 
-  /**
-   * Handle submit rating button click.
-   * Saves the rating and shows thank you message.
-   */
   function handleSubmitRating() {
     saveRating();
-    
-    // Show thank you message with animation
     thankYouMessage.classList.add('show');
-    submitRatingBtn.textContent = '✓ Rating Saved';
+    submitRatingBtn.textContent  = '✓ Rating Saved';
     submitRatingBtn.style.opacity = '0.6';
-    submitRatingBtn.disabled = true;
-
-    // Hide thank you message and reset button after 3 seconds
+    submitRatingBtn.disabled      = true;
     setTimeout(() => {
       thankYouMessage.classList.remove('show');
-      submitRatingBtn.textContent = '✓ Submit Rating';
+      submitRatingBtn.textContent   = '✓ Submit Rating';
       submitRatingBtn.style.opacity = '1';
-      submitRatingBtn.disabled = false;
+      submitRatingBtn.disabled      = false;
     }, 3000);
   }
 
-  /**
-   * Handle keyboard events on stars (accessibility).
-   * Allows rating via keyboard: arrow keys + enter.
-   */
   function handleStarKeydown(e) {
     const star = e.target.closest('.star');
     if (!star) return;
-
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      const rating = parseInt(star.dataset.rating, 10);
-      currentRating = rating;
+      currentRating = parseInt(star.dataset.rating, 10);
       updateStarDisplay();
       updateRatingText();
     }
   }
 
-  // ── Event Listeners for Rating System ────────────────────
-
-  // Star clicks for rating selection
-  starsContainer.addEventListener('click', handleStarClick);
-
-  // Star hover for preview
-  starsContainer.addEventListener('mouseover', handleStarHover);
+  starsContainer.addEventListener('click',      handleStarClick);
+  starsContainer.addEventListener('mouseover',  handleStarHover);
   starsContainer.addEventListener('mouseleave', handleStarLeave);
+  starsContainer.addEventListener('keydown',    handleStarKeydown);
+  submitRatingBtn.addEventListener('click',     handleSubmitRating);
 
-  // Keyboard accessibility
-  starsContainer.addEventListener('keydown', handleStarKeydown);
+  loadRating();
+</script>
 
-  // Submit button
-  submitRatingBtn.addEventListener('click', handleSubmitRating);
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UCCARON</title>
 
-  // Load saved rating on page load
+  <!-- Google Fonts: Syne (display) + DM Mono (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── Design Tokens ─────────────────────────────────────── */
+    :root {
+      --bg:        #0b0c0e;
+      --surface:   #141518;
+      --border:    #252730;
+      --accent:    #f0a500;
+      --accent2:   #ff6b35;
+      --text:      #e8e9ed;
+      --muted:     #5a5d6e;
+      --danger:    #e05252;
+      --radius:    14px;
+      --mono:      'DM Mono', monospace;
+      --display:   'Syne', sans-serif;
+    }
+
+    /* ─── Reset & Base ──────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--mono);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      background-image:
+        linear-gradient(rgba(240,165,0,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(240,165,0,.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    /* ─── Card ──────────────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 540px;
+      padding: 40px 36px 36px;
+      box-shadow: 0 32px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.04) inset;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 120px; height: 120px;
+      background: radial-gradient(circle at top right, rgba(240,165,0,.18), transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ─── Header ────────────────────────────────────────────── */
+    .header { margin-bottom: 32px; }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+
+    .wave-icon {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 22px;
+    }
+    .wave-icon span {
+      display: block;
+      width: 4px;
+      background: var(--accent);
+      border-radius: 99px;
+      animation: wave 1.2s ease-in-out infinite;
+    }
+    .wave-icon span:nth-child(1) { height: 8px;  animation-delay: 0s; }
+    .wave-icon span:nth-child(2) { height: 16px; animation-delay: .15s; }
+    .wave-icon span:nth-child(3) { height: 22px; animation-delay: .3s; }
+    .wave-icon span:nth-child(4) { height: 14px; animation-delay: .45s; }
+    .wave-icon span:nth-child(5) { height: 8px;  animation-delay: .6s; }
+
+    @keyframes wave {
+      0%, 100% { transform: scaleY(1); opacity: 1; }
+      50%       { transform: scaleY(.4); opacity: .5; }
+    }
+
+    .wave-icon.idle span { animation-play-state: paused; opacity: .35; }
+
+    h1 {
+      font-family: var(--display);
+      font-size: 1.65rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--text);
+    }
+
+    .subtitle {
+      font-size: .78rem;
+      color: var(--muted);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    /* ─── Input Row ─────────────────────────────────────────── */
+    .input-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: var(--display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      padding: 14px 18px;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      letter-spacing: .02em;
+    }
+    input[type="text"]::placeholder { color: var(--muted); font-weight: 400; font-size: 1rem; }
+    input[type="text"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(240,165,0,.12);
+    }
+
+    /* ─── Buttons ───────────────────────────────────────────── */
+    .btn {
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: .88rem;
+      letter-spacing: .04em;
+      padding: 14px 20px;
+      transition: transform .12s, opacity .2s, box-shadow .2s;
+    }
+    .btn:active { transform: scale(.96); }
+
+    .btn-speak {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #0b0c0e;
+      box-shadow: 0 4px 20px rgba(240,165,0,.3);
+    }
+    .btn-speak:hover { box-shadow: 0 6px 28px rgba(240,165,0,.45); }
+    .btn-speak:disabled { opacity: .45; cursor: not-allowed; }
+
+    .btn-clear {
+      background: transparent;
+      border: 1.5px solid var(--border);
+      color: var(--muted);
+      padding: 14px 16px;
+    }
+    .btn-clear:hover { border-color: var(--danger); color: var(--danger); }
+
+    /* ─── Word Display ──────────────────────────────────────── */
+    .word-display {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .word-display .label {
+      font-size: .7rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      white-space: nowrap;
+    }
+
+    #wordShown {
+      font-family: var(--display);
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: .02em;
+      transition: opacity .2s;
+      word-break: break-all;
+    }
+
+    /* ─── Controls Grid ─────────────────────────────────────── */
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .control-group label {
+      display: block;
+      font-size: .7rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--muted);
+      margin-bottom: 7px;
+    }
+
+    select {
+      width: 100%;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: .85rem;
+      padding: 10px 12px;
+      outline: none;
+      appearance: none;
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235a5d6e' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      transition: border-color .2s;
+    }
+    select:focus { border-color: var(--accent); }
+
+    /* Loading state for voice select */
+    select.loading {
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* Speed Slider */
+    .speed-row { grid-column: 1 / -1; }
+
+    .slider-track { position: relative; }
+
+    input[type="range"] {
+      width: 100%;
+      -webkit-appearance: none;
+      height: 4px;
+      background: var(--border);
+      border-radius: 99px;
+      outline: none;
+      cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px; height: 18px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 0 3px rgba(240,165,0,.2);
+      transition: box-shadow .2s;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover { box-shadow: 0 0 0 6px rgba(240,165,0,.25); }
+
+    .speed-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: .68rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* ─── Meaning Box ───────────────────────────────────────── */
+    #meaningBox {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-size: .85rem;
+      line-height: 1.65;
+      display: none;
+      /* BUG 5 FIX: animation moved to .animate class so JS can re-trigger it
+         by removing the class, forcing a reflow, then re-adding it. */
+    }
+
+    #meaningBox.animate {
+      animation: fadeUp .3s ease;
+    }
+
+    #meaningBox .m-word {
+      font-family: var(--display);
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+
+    #meaningBox .m-phonetic {
+      font-size: .75rem;
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 10px;
+    }
+
+    .meaning-entry { margin-bottom: 10px; }
+    .meaning-entry .pos {
+      display: inline-block;
+      background: rgba(240,165,0,.12);
+      color: var(--accent);
+      font-size: .68rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 5px;
+    }
+
+    .meaning-entry .def { color: #b0b3c1; font-size: .82rem; }
+    .meaning-entry .example {
+      color: var(--muted);
+      font-size: .77rem;
+      font-style: italic;
+      margin-top: 3px;
+    }
+
+    .m-loading { color: var(--muted); font-style: italic; }
+    .m-error   { color: var(--danger); font-size: .8rem; }
+
+    /* ─── Status Bar ────────────────────────────────────────── */
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 18px;
+      font-size: .72rem;
+      color: var(--muted);
+      letter-spacing: .04em;
+    }
+
+    .status-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--muted);
+      transition: background .3s;
+      flex-shrink: 0;
+    }
+    .status-dot.speaking { background: var(--accent); box-shadow: 0 0 8px var(--accent); animation: pulse .8s ease-in-out infinite; }
+    .status-dot.ready    { background: #3ecf6e; }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50%       { transform: scale(1.4); opacity: .6; }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── Rating System ────────────────────────────────────── */
+    .rating-container {
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .rating-label {
+      display: block;
+      font-size: .72rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      margin-bottom: 14px;
+    }
+
+    .stars {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .star {
+      font-size: 2.2rem;
+      cursor: pointer;
+      color: var(--muted);
+      transition: transform .15s ease, color .15s ease, text-shadow .15s ease;
+      user-select: none;
+      flex-shrink: 0;
+    }
+
+    .star:hover {
+      transform: scale(1.15);
+      color: var(--accent);
+      text-shadow: 0 0 12px rgba(240,165,0,.6);
+    }
+
+    .star.active {
+      color: var(--accent);
+      text-shadow: 0 0 16px rgba(240,165,0,.8);
+      animation: starPop .3s ease;
+    }
+
+    @keyframes starPop {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    .rating-display {
+      font-size: .85rem;
+      color: var(--text);
+      margin-bottom: 12px;
+      min-height: 1.5rem;
+      transition: opacity .3s ease;
+    }
+
+    .rating-display.hidden { opacity: 0; display: none; }
+
+    .rating-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    .btn-submit-rating {
+      background: rgba(240,165,0,.15);
+      border: 1.5px solid var(--accent);
+      color: var(--accent);
+      font-size: .8rem;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+
+    .btn-submit-rating:hover {
+      background: rgba(240,165,0,.25);
+      box-shadow: 0 0 16px rgba(240,165,0,.3);
+    }
+
+    .btn-submit-rating:active { transform: scale(.96); }
+
+    .thank-you-message {
+      font-size: .8rem;
+      color: #3ecf6e;
+      animation: slideDown .4s ease;
+      display: none;
+    }
+
+    .thank-you-message.show { display: block; }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── Responsive ────────────────────────────────────────── */
+    @media (max-width: 480px) {
+      .card { padding: 28px 20px 24px; }
+      h1 { font-size: 1.35rem; }
+      .controls { grid-template-columns: 1fr; }
+      .speed-row { grid-column: 1; }
+      .star { font-size: 1.8rem; }
+      .rating-actions { flex-direction: column; }
+      .btn-submit-rating { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+
+  <!-- ── Header ─────────────────────────────────────────────── -->
+  <div class="header">
+    <div class="logo-row">
+      <div class="wave-icon idle" id="waveIcon">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <h1>UCCARON</h1>
+    </div>
+  </div>
+
+  <!-- ── Word Input ──────────────────────────────────────────── -->
+  <div class="input-row">
+    <input
+      type="text"
+      id="wordInput"
+      placeholder="Type a word…"
+      maxlength="60"
+      autocomplete="off"
+      spellcheck="false"
+      aria-label="English word"
+    />
+    <button class="btn btn-clear" id="clearBtn" title="Clear" aria-label="Clear">✕</button>
+  </div>
+
+  <!-- ── Word Display ────────────────────────────────────────── -->
+  <div class="word-display" aria-live="polite">
+    <span class="label">Word</span>
+    <span id="wordShown">—</span>
+  </div>
+
+  <!-- ── Voice & Speed Controls ─────────────────────────────── -->
+  <div class="controls">
+
+    <div class="control-group">
+      <label for="voiceSelect">Voice</label>
+      <select id="voiceSelect" aria-label="Select voice">
+        <option value="">Loading voices…</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label for="accentSelect">Accent</label>
+      <select id="accentSelect" aria-label="Select accent">
+        <option value="en-US">🇺🇸  US English</option>
+        <option value="en-GB">🇬🇧  UK English</option>
+        <option value="en-AU">🇦🇺  AUS English</option>
+      </select>
+    </div>
+
+    <div class="control-group speed-row">
+      <label>Speed — <span id="speedLabel">Normal</span></label>
+      <div class="slider-track">
+        <input
+          type="range"
+          id="speedRange"
+          min="0.5" max="1.8" step="0.1" value="1"
+          aria-label="Speech speed"
+        />
+      </div>
+      <div class="speed-labels">
+        <span>0.5×</span><span>Normal</span><span>1.8×</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Speak Button ────────────────────────────────────────── -->
+  <button class="btn btn-speak" id="speakBtn" aria-label="Speak word">
+    ▶ &nbsp;Speak
+  </button>
+
+  <!-- ── Rating System ────────────────────────────────────────── -->
+  <div class="rating-container">
+    <span class="rating-label">Rate this app</span>
+
+    <div class="stars" id="starsContainer" aria-label="Rate from 1 to 5 stars">
+      <span class="star" data-rating="1" role="button" tabindex="0">☆</span>
+      <span class="star" data-rating="2" role="button" tabindex="0">☆</span>
+      <span class="star" data-rating="3" role="button" tabindex="0">☆</span>
+      <span class="star" data-rating="4" role="button" tabindex="0">☆</span>
+      <span class="star" data-rating="5" role="button" tabindex="0">☆</span>
+    </div>
+
+    <div class="rating-display" id="ratingDisplay"></div>
+
+    <div class="rating-actions">
+      <button class="btn-submit-rating" id="submitRatingBtn" style="display: none;">
+        ✓ Submit Rating
+      </button>
+    </div>
+
+    <div class="thank-you-message" id="thankYouMessage">
+      ✓ Thank you for rating!
+    </div>
+  </div>
+
+  <!-- ── Dictionary Meaning Box ─────────────────────────────── -->
+  <div id="meaningBox" aria-live="polite"></div>
+
+  <!-- ── Status Bar ─────────────────────────────────────────── -->
+  <div class="status-bar">
+    <div class="status-dot" id="statusDot"></div>
+    <span id="statusText">Enter a word to get started</span>
+  </div>
+
+</div>
+
+<script>
+  /* ── DOM refs ────────────────────────────────────────────── */
+  const wordInput    = document.getElementById('wordInput');
+  const wordShown    = document.getElementById('wordShown');
+  const speakBtn     = document.getElementById('speakBtn');
+  const clearBtn     = document.getElementById('clearBtn');
+  const voiceSelect  = document.getElementById('voiceSelect');
+  const accentSelect = document.getElementById('accentSelect');
+  const speedRange   = document.getElementById('speedRange');
+  const speedLabel   = document.getElementById('speedLabel');
+  const meaningBox   = document.getElementById('meaningBox');
+  const statusDot    = document.getElementById('statusDot');
+  const statusText   = document.getElementById('statusText');
+  const waveIcon     = document.getElementById('waveIcon');
+
+  /* ── Speech Synthesis setup ──────────────────────────────── */
+  // BUG 6 FIX: Guard against browsers that don't support the Web Speech API
+  // (some mobile browsers, older Safari) — without this the entire script crashes.
+  const synth = window.speechSynthesis || null;
+  let voices  = [];
+
+  if (!synth) {
+    speakBtn.disabled    = true;
+    speakBtn.textContent = '✕ Speech not supported';
+    voiceSelect.innerHTML = '<option>Not supported</option>';
+    setStatus('error', 'Web Speech API not available in this browser');
+  }
+
+  /**
+   * FIX: Robust voice loader.
+   *
+   * ROOT CAUSE OF BUG:
+   * The original code called populateVoices() immediately at page load,
+   * then set onvoiceschanged. On Chrome (and all Chromium-based browsers),
+   * getVoices() returns an EMPTY ARRAY on the first synchronous call —
+   * voices are loaded asynchronously. The onvoiceschanged event fires once
+   * they're ready. On the developer's machine the voices were already cached,
+   * so the synchronous call happened to return them — hiding the bug.
+   *
+   * FIX STRATEGY:
+   * 1. Register onvoiceschanged BEFORE any getVoices() call.
+   * 2. After registering, attempt an immediate load (works on Firefox/Safari
+   *    which return voices synchronously).
+   * 3. Add a polling fallback: some browsers/environments never fire
+   *    onvoiceschanged reliably. Poll every 100 ms for up to 3 seconds,
+   *    stopping as soon as voices appear.
+   */
+  function populateVoices() {
+    const available = synth.getVoices();
+
+    // Guard: don't render an empty list — wait for the next tick/event
+    if (available.length === 0) return;
+
+    voices = available;
+
+    const lang     = accentSelect.value;
+    const filtered = voices.filter(v => v.lang.startsWith(lang.split('-')[0]));
+    const sorted   = [
+      ...filtered.filter(v => v.lang === lang),
+      ...filtered.filter(v => v.lang !== lang),
+    ];
+
+    voiceSelect.innerHTML = '';
+    voiceSelect.classList.remove('loading');
+
+    const listToRender = sorted.length > 0
+      ? sorted
+      : voices.filter(v => v.lang.startsWith('en')); // broad English fallback
+
+    if (listToRender.length === 0) {
+      // Last-resort: show every available voice
+      voices.forEach(addVoiceOption);
+    } else {
+      listToRender.forEach(addVoiceOption);
+    }
+
+    setStatus('ready', 'Ready to speak');
+  }
+
+  function addVoiceOption(v) {
+    const opt       = document.createElement('option');
+    opt.value       = v.name;
+    opt.textContent = `${v.name} (${v.lang})`;
+    voiceSelect.appendChild(opt);
+  }
+
+  /**
+   * FIX: Register the event handler FIRST, then attempt synchronous load,
+   * then start the polling fallback.
+   */
+  function initVoices() {
+    voiceSelect.classList.add('loading');
+
+    // Step 1 — hook the event before anything else
+    if (typeof synth.onvoiceschanged !== 'undefined') {
+      synth.onvoiceschanged = populateVoices;
+    }
+
+    // Step 2 — attempt immediate load (Firefox / Safari)
+    populateVoices();
+
+    // Step 3 — polling fallback (handles Chrome & edge cases where the
+    //           event fires before our handler was registered, or not at all)
+    let attempts = 0;
+    const MAX_ATTEMPTS = 30; // 30 × 100 ms = 3 s
+    const poll = setInterval(() => {
+      attempts++;
+      if (voices.length > 0 || attempts >= MAX_ATTEMPTS) {
+        clearInterval(poll);
+        return;
+      }
+      populateVoices();
+    }, 100);
+  }
+
+  if (synth) initVoices();
+
+  /* ── Speed slider label ──────────────────────────────────── */
+  speedRange.addEventListener('input', () => {
+    const val = parseFloat(speedRange.value);
+    if      (val <= 0.6) speedLabel.textContent = 'Slow';
+    else if (val <= 1.2) speedLabel.textContent = 'Normal';
+    else if (val <= 1.5) speedLabel.textContent = 'Fast';
+    else                 speedLabel.textContent = 'Very Fast';
+  });
+
+  /* ── Accent change → refresh voice list ─────────────────── */
+  accentSelect.addEventListener('change', populateVoices);
+
+  /* ── Word input: live preview ────────────────────────────── */
+  wordInput.addEventListener('input', () => {
+    wordShown.textContent = wordInput.value.trim() || '—';
+  });
+
+  /* ── Press Enter → speak ─────────────────────────────────── */
+  wordInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') speakWord();
+  });
+
+  /* ── Clear button ────────────────────────────────────────── */
+  clearBtn.addEventListener('click', () => {
+    wordInput.value       = '';
+    wordShown.textContent = '—';
+    meaningBox.style.display = 'none';
+    synth.cancel();
+    setStatus('idle', 'Enter a word to get started');
+    wordInput.focus();
+  });
+
+  /* ── Speak button ────────────────────────────────────────── */
+  speakBtn.addEventListener('click', speakWord);
+
+  function speakWord() {
+    if (!synth) return;
+
+    const word = wordInput.value.trim();
+    if (!word) {
+      setStatus('error', 'Please type a word first');
+      wordInput.focus();
+      return;
+    }
+
+    synth.cancel();
+
+    // BUG 2 FIX: Chrome pauses the synth engine when the tab loses focus.
+    // Calling resume() before speak() unblocks it so onstart/onend fire reliably.
+    synth.resume();
+
+    const utterance  = new SpeechSynthesisUtterance(word);
+    utterance.rate   = parseFloat(speedRange.value);
+    utterance.lang   = accentSelect.value;
+
+    const voiceObj = voices.find(v => v.name === voiceSelect.value);
+    if (voiceObj) utterance.voice = voiceObj;
+
+    // BUG 2 FIX: Safety watchdog — if onend never fires (Chrome bug),
+    // re-enable the button after a generous timeout so the UI doesn't lock up.
+    let watchdog;
+
+    utterance.onstart = () => {
+      setStatus('speaking', `Speaking "${word}"…`);
+      waveIcon.classList.remove('idle');
+      speakBtn.disabled = true;
+      watchdog = setTimeout(() => {
+        // Force-reset if the engine silently died
+        waveIcon.classList.add('idle');
+        speakBtn.disabled = false;
+        setStatus('ready', 'Ready to speak');
+      }, 10000); // 10 s ceiling — more than enough for any single word
+    };
+
+    utterance.onend = () => {
+      clearTimeout(watchdog);
+      setStatus('ready', 'Done');
+      waveIcon.classList.add('idle');
+      speakBtn.disabled = false;
+    };
+
+    utterance.onerror = (e) => {
+      clearTimeout(watchdog);
+      // 'interrupted' fires when synth.cancel() is called mid-speech (e.g. user
+      // clicks Speak again) — that's expected, not a real error.
+      if (e.error === 'interrupted') return;
+      setStatus('error', `Speech error: ${e.error}`);
+      waveIcon.classList.add('idle');
+      speakBtn.disabled = false;
+    };
+
+    synth.speak(utterance);
+    fetchMeaning(word);
+  }
+
+  /* ── Status helper ───────────────────────────────────────── */
+  function setStatus(state, msg) {
+    statusText.textContent = msg;
+    statusDot.className    = 'status-dot';
+    if (state === 'speaking') statusDot.classList.add('speaking');
+    if (state === 'ready')    statusDot.classList.add('ready');
+  }
+
+  /* ── Dictionary API ──────────────────────────────────────── */
+
+  /** Helper: create an element, assign a class, set its text, return it. */
+  function el(tag, className, text) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
+  // BUG 1 FIX: Track the active fetch so we can abort it if a new word is
+  // looked up before the previous request completes. Without this, a slow
+  // response for an earlier word can overwrite the result for the current one.
+  let activeFetchController = null;
+
+  async function fetchMeaning(word) {
+    // Cancel any in-flight request
+    if (activeFetchController) activeFetchController.abort();
+    activeFetchController = new AbortController();
+    const signal = activeFetchController.signal;
+
+    // BUG 5 FIX: Re-trigger the fadeUp animation on every lookup.
+    // Simply toggling display: none → block doesn't restart a CSS animation
+    // because the element stays in the DOM. Forcing a reflow between removing
+    // and re-adding the class resets the animation timeline.
+    meaningBox.style.display = 'none';
+    meaningBox.classList.remove('animate');
+    // eslint-disable-next-line no-unused-expressions
+    meaningBox.offsetHeight; // force reflow
+    meaningBox.style.display = 'block';
+    meaningBox.classList.add('animate');
+
+    meaningBox.replaceChildren(el('p', 'm-loading', `Looking up "${word}"…`));
+
+    try {
+      const res  = await fetch(
+        `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`,
+        { signal }
+      );
+      if (!res.ok) throw new Error('not_found');
+      const data = await res.json();
+
+      const entry    = data[0];
+      const phonetic = entry.phonetic || (entry.phonetics.find(p => p.text)?.text) || '';
+
+      const fragment = document.createDocumentFragment();
+      fragment.appendChild(el('div', 'm-word',     entry.word));
+      if (phonetic) fragment.appendChild(el('div', 'm-phonetic', phonetic));
+
+      entry.meanings.slice(0, 3).forEach(m => {
+        const def     = m.definitions[0];
+        const entryEl = el('div', 'meaning-entry');
+        entryEl.appendChild(el('span', 'pos', m.partOfSpeech));
+        entryEl.appendChild(el('div',  'def', def.definition));
+        if (def.example) entryEl.appendChild(el('div', 'example', `"${def.example}"`));
+        fragment.appendChild(entryEl);
+      });
+
+      meaningBox.replaceChildren(fragment);
+
+    } catch (err) {
+      // AbortError just means a newer request took over — not a real error
+      if (err.name === 'AbortError') return;
+
+      const p = el('p', 'm-error');
+      if (err.message === 'not_found') {
+        p.appendChild(document.createTextNode('No definition found for "'));
+        p.appendChild(el('strong', null, word));
+        p.appendChild(document.createTextNode('".'));
+      } else {
+        p.textContent = 'Could not load definition (check your connection).';
+      }
+      meaningBox.replaceChildren(p);
+    }
+  }
+
+  /* ── Initial status ──────────────────────────────────────── */
+  setStatus('idle', 'Enter a word to get started');
+
+  /* ═══════════════════════════════════════════════════════════
+     RATING SYSTEM
+  ═══════════════════════════════════════════════════════════ */
+  const starsContainer   = document.getElementById('starsContainer');
+  const stars            = document.querySelectorAll('.star');
+  const ratingDisplay    = document.getElementById('ratingDisplay');
+  const submitRatingBtn  = document.getElementById('submitRatingBtn');
+  const thankYouMessage  = document.getElementById('thankYouMessage');
+
+  let currentRating = 0;
+  const STORAGE_KEY = 'uccaron_rating';
+
+  // BUG 4 FIX: localStorage throws SecurityError in private/incognito mode on
+  // some browsers. Wrap all access in helpers that silently degrade.
+  function storageGet(key) {
+    try { return localStorage.getItem(key); } catch { return null; }
+  }
+  function storageSet(key, val) {
+    try { localStorage.setItem(key, val); } catch { /* silently ignore */ }
+  }
+
+  function loadRating() {
+    const saved = storageGet(STORAGE_KEY);
+    if (!saved) return;
+
+    // BUG 3 FIX: Validate before using. parseInt returns NaN for corrupted data;
+    // NaN comparisons always return false, silently breaking all star logic.
+    const parsed = parseInt(saved, 10);
+    if (Number.isInteger(parsed) && parsed >= 1 && parsed <= 5) {
+      currentRating = parsed;
+      updateStarDisplay();
+      updateRatingText();
+    }
+  }
+
+  function saveRating() {
+    if (currentRating > 0) storageSet(STORAGE_KEY, currentRating.toString());
+  }
+
+  function updateStarDisplay() {
+    stars.forEach((star, index) => {
+      const starNum = index + 1;
+      if (starNum <= currentRating) {
+        star.textContent = '★';
+        star.classList.add('active');
+      } else {
+        star.textContent = '☆';
+        star.classList.remove('active');
+      }
+    });
+  }
+
+  function updateRatingText() {
+    if (currentRating > 0) {
+      ratingDisplay.textContent = `You rated: ${currentRating}/5`;
+      ratingDisplay.classList.remove('hidden');
+      submitRatingBtn.style.display = 'inline-block';
+    } else {
+      ratingDisplay.textContent = '';
+      ratingDisplay.classList.add('hidden');
+      submitRatingBtn.style.display = 'none';
+      thankYouMessage.classList.remove('show');
+    }
+  }
+
+  function handleStarClick(e) {
+    const star = e.target.closest('.star');
+    if (!star) return;
+    currentRating = parseInt(star.dataset.rating, 10);
+    updateStarDisplay();
+    updateRatingText();
+  }
+
+  function handleStarHover(e) {
+    const star = e.target.closest('.star');
+    if (!star) return;
+    const hoverRating = parseInt(star.dataset.rating, 10);
+    stars.forEach((s, index) => {
+      s.textContent = (index + 1) <= hoverRating ? '★'
+        : currentRating >= (index + 1) ? '★' : '☆';
+    });
+  }
+
+  function handleStarLeave() { updateStarDisplay(); }
+
+  function handleSubmitRating() {
+    saveRating();
+    thankYouMessage.classList.add('show');
+    submitRatingBtn.textContent  = '✓ Rating Saved';
+    submitRatingBtn.style.opacity = '0.6';
+    submitRatingBtn.disabled      = true;
+    setTimeout(() => {
+      thankYouMessage.classList.remove('show');
+      submitRatingBtn.textContent   = '✓ Submit Rating';
+      submitRatingBtn.style.opacity = '1';
+      submitRatingBtn.disabled      = false;
+    }, 3000);
+  }
+
+  function handleStarKeydown(e) {
+    const star = e.target.closest('.star');
+    if (!star) return;
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      currentRating = parseInt(star.dataset.rating, 10);
+      updateStarDisplay();
+      updateRatingText();
+    }
+  }
+
+  starsContainer.addEventListener('click',      handleStarClick);
+  starsContainer.addEventListener('mouseover',  handleStarHover);
+  starsContainer.addEventListener('mouseleave', handleStarLeave);
+  starsContainer.addEventListener('keydown',    handleStarKeydown);
+  submitRatingBtn.addEventListener('click',     handleSubmitRating);
+
+  loadRating();
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UCCARON</title>
+
+  <!-- Google Fonts: Syne (display) + DM Mono (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── Design Tokens ─────────────────────────────────────── */
+    :root {
+      --bg:        #0b0c0e;
+      --surface:   #141518;
+      --border:    #252730;
+      --accent:    #f0a500;
+      --accent2:   #ff6b35;
+      --text:      #e8e9ed;
+      --muted:     #5a5d6e;
+      --danger:    #e05252;
+      --radius:    14px;
+      --mono:      'DM Mono', monospace;
+      --display:   'Syne', sans-serif;
+    }
+
+    /* ─── Reset & Base ──────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--mono);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      background-image:
+        linear-gradient(rgba(240,165,0,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(240,165,0,.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    /* ─── Card ──────────────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 540px;
+      padding: 40px 36px 36px;
+      box-shadow: 0 32px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.04) inset;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 120px; height: 120px;
+      background: radial-gradient(circle at top right, rgba(240,165,0,.18), transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ─── Header ────────────────────────────────────────────── */
+    .header { margin-bottom: 32px; }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+
+    .wave-icon {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 22px;
+    }
+    .wave-icon span {
+      display: block;
+      width: 4px;
+      background: var(--accent);
+      border-radius: 99px;
+      animation: wave 1.2s ease-in-out infinite;
+    }
+    .wave-icon span:nth-child(1) { height: 8px;  animation-delay: 0s; }
+    .wave-icon span:nth-child(2) { height: 16px; animation-delay: .15s; }
+    .wave-icon span:nth-child(3) { height: 22px; animation-delay: .3s; }
+    .wave-icon span:nth-child(4) { height: 14px; animation-delay: .45s; }
+    .wave-icon span:nth-child(5) { height: 8px;  animation-delay: .6s; }
+
+    @keyframes wave {
+      0%, 100% { transform: scaleY(1); opacity: 1; }
+      50%       { transform: scaleY(.4); opacity: .5; }
+    }
+
+    .wave-icon.idle span { animation-play-state: paused; opacity: .35; }
+
+    h1 {
+      font-family: var(--display);
+      font-size: 1.65rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--text);
+    }
+
+    .subtitle {
+      font-size: .78rem;
+      color: var(--muted);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    /* ─── Input Row ─────────────────────────────────────────── */
+    .input-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: var(--display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      padding: 14px 18px;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      letter-spacing: .02em;
+    }
+    input[type="text"]::placeholder { color: var(--muted); font-weight: 400; font-size: 1rem; }
+    input[type="text"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(240,165,0,.12);
+    }
+
+    /* ─── Buttons ───────────────────────────────────────────── */
+    .btn {
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: .88rem;
+      letter-spacing: .04em;
+      padding: 14px 20px;
+      transition: transform .12s, opacity .2s, box-shadow .2s;
+    }
+    .btn:active { transform: scale(.96); }
+
+    .btn-speak {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #0b0c0e;
+      box-shadow: 0 4px 20px rgba(240,165,0,.3);
+    }
+    .btn-speak:hover { box-shadow: 0 6px 28px rgba(240,165,0,.45); }
+    .btn-speak:disabled { opacity: .45; cursor: not-allowed; }
+
+    .btn-clear {
+      background: transparent;
+      border: 1.5px solid var(--border);
+      color: var(--muted);
+      padding: 14px 16px;
+    }
+    .btn-clear:hover { border-color: var(--danger); color: var(--danger); }
+
+    /* ─── Word Display ──────────────────────────────────────── */
+    .word-display {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .word-display .label {
+      font-size: .7rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      white-space: nowrap;
+    }
+
+    #wordShown {
+      font-family: var(--display);
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: .02em;
+      transition: opacity .2s;
+      word-break: break-all;
+    }
+
+    /* ─── Controls Grid ─────────────────────────────────────── */
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .control-group label {
+      display: block;
+      font-size: .7rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--muted);
+      margin-bottom: 7px;
+    }
+
+    select {
+      width: 100%;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: .85rem;
+      padding: 10px 12px;
+      outline: none;
+      appearance: none;
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235a5d6e' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      transition: border-color .2s;
+    }
+    select:focus { border-color: var(--accent); }
+
+    /* Loading state for voice select */
+    select.loading {
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* Speed Slider */
+    .speed-row { grid-column: 1 / -1; }
+
+    .slider-track { position: relative; }
+
+    input[type="range"] {
+      width: 100%;
+      -webkit-appearance: none;
+      height: 4px;
+      background: var(--border);
+      border-radius: 99px;
+      outline: none;
+      cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px; height: 18px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 0 3px rgba(240,165,0,.2);
+      transition: box-shadow .2s;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover { box-shadow: 0 0 0 6px rgba(240,165,0,.25); }
+
+    .speed-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: .68rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* ─── Meaning Box ───────────────────────────────────────── */
+    #meaningBox {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-size: .85rem;
+      line-height: 1.65;
+      display: none;
+      /* BUG 5 FIX: animation moved to .animate class so JS can re-trigger it
+         by removing the class, forcing a reflow, then re-adding it. */
+    }
+
+    #meaningBox.animate {
+      animation: fadeUp .3s ease;
+    }
+
+    #meaningBox .m-word {
+      font-family: var(--display);
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+
+    #meaningBox .m-phonetic {
+      font-size: .75rem;
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 10px;
+    }
+
+    .meaning-entry { margin-bottom: 10px; }
+    .meaning-entry .pos {
+      display: inline-block;
+      background: rgba(240,165,0,.12);
+      color: var(--accent);
+      font-size: .68rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 5px;
+    }
+
+    .meaning-entry .def { color: #b0b3c1; font-size: .82rem; }
+    .meaning-entry .example {
+      color: var(--muted);
+      font-size: .77rem;
+      font-style: italic;
+      margin-top: 3px;
+    }
+
+    .m-loading { color: var(--muted); font-style: italic; }
+    .m-error   { color: var(--danger); font-size: .8rem; }
+
+    /* ─── Status Bar ────────────────────────────────────────── */
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 18px;
+      font-size: .72rem;
+      color: var(--muted);
+      letter-spacing: .04em;
+    }
+
+    .status-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--muted);
+      transition: background .3s;
+      flex-shrink: 0;
+    }
+    .status-dot.speaking { background: var(--accent); box-shadow: 0 0 8px var(--accent); animation: pulse .8s ease-in-out infinite; }
+    .status-dot.ready    { background: #3ecf6e; }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50%       { transform: scale(1.4); opacity: .6; }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── Rating System ────────────────────────────────────── */
+    .rating-container {
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .rating-label {
+      display: block;
+      font-size: .72rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      margin-bottom: 14px;
+    }
+
+    .stars {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .star {
+      font-size: 2.2rem;
+      cursor: pointer;
+      color: var(--muted);
+      transition: transform .15s ease, color .15s ease, text-shadow .15s ease;
+      user-select: none;
+      flex-shrink: 0;
+    }
+
+    .star:hover {
+      transform: scale(1.15);
+      color: var(--accent);
+      text-shadow: 0 0 12px rgba(240,165,0,.6);
+    }
+
+    .star.active {
+      color: var(--accent);
+      text-shadow: 0 0 16px rgba(240,165,0,.8);
+      animation: starPop .3s ease;
+    }
+
+    @keyframes starPop {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    .rating-display {
+      font-size: .85rem;
+      color: var(--text);
+      margin-bottom: 12px;
+      min-height: 1.5rem;
+      transition: opacity .3s ease;
+    }
+
+    .rating-display.hidden { opacity: 0; display: none; }
+
+    .rating-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    .btn-submit-rating {
+      background: rgba(240,165,0,.15);
+      border: 1.5px solid var(--accent);
+      color: var(--accent);
+      font-size: .8rem;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+
+    .btn-submit-rating:hover {
+      background: rgba(240,165,0,.25);
+      box-shadow: 0 0 16px rgba(240,165,0,.3);
+    }
+
+    .btn-submit-rating:active { transform: scale(.96); }
+
+    .thank-you-message {
+      font-size: .8rem;
+      color: #3ecf6e;
+      animation: slideDown .4s ease;
+      display: none;
+    }
+
+    .thank-you-message.show { display: block; }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── Responsive ────────────────────────────────────────── */
+    @media (max-width: 480px) {
+      .card { padding: 28px 20px 24px; }
+      h1 { font-size: 1.35rem; }
+      .controls { grid-template-columns: 1fr; }
+      .speed-row { grid-column: 1; }
+      .star { font-size: 1.8rem; }
+      .rating-actions { flex-direction: column; }
+      .btn-submit-rating { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+
+  <!-- ── Header ─────────────────────────────────────────────── -->
+  <div class="header">
+    <div class="logo-row">
+      <div class="wave-icon idle" id="waveIcon">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <h1>UCCARON</h1>
+    </div>
+  </div>
+
+  <!-- ── Word Input ──────────────────────────────────────────── -->
+  <div class="input-row">
+    <input
+      type="text"
+      id="wordInput"
+      placeholder="Type a word…"
+      maxlength="60"
+      autocomplete="off"
+      spellcheck="false"
+      aria-label="English word"
+    />
+    <button class="btn btn-clear" id="clearBtn" title="Clear" aria-label="Clear">✕</button>
+  </div>
+
+  <!-- ── Word Display ────────────────────────────────────────── -->
+  <div class="word-display" aria-live="polite">
+    <span class="label">Word</span>
+    <span id="wordShown">—</span>
+  </div>
+
+  <!-- ── Voice & Speed Controls ─────────────────────────────── -->
+  <div class="controls">
+
+    <div class="control-group">
+      <label for="voiceSelect">Voice</label>
+      <select id="voiceSelect" aria-label="Select voice">
+        <option value="">Loading voices…</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label for="accentSelect">Accent</label>
+      <select id="accentSelect" aria-label="Select accent">
+        <option value="en-US">🇺🇸  US English</option>
+        <option value="en-GB">🇬🇧  UK English</option>
+        <option value="en-AU">🇦🇺  AUS English</option>
+      </select>
+    </div>
+
+    <div class="control-group speed-row">
+      <label>Speed — <span id="speedLabel">Normal</span></label>
+      <div class="slider-track">
+        <input
+          type="range"
+          id="speedRange"
+          min="0.5" max="1.8" step="0.1" value="1"
+          aria-label="Speech speed"
+        />
+      </div>
+      <div class="speed-labels">
+        <span>0.5×</span><span>Normal</span><span>1.8×</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Speak Button ────────────────────────────────────────── -->
+  <button class="btn btn-speak" id="speakBtn" aria-label="Speak word">
+    ▶ &nbsp;Speak
+  </button>
+
+  <!-- ── Rating System ────────────────────────────────────────── -->
+  <div class="rating-container">
+    <span class="rating-label">Rate this app</span>
+
+    <div class="stars" id="starsContainer" aria-label="Rate from 1 to 5 stars">
+      <span class="star" data-rating="1" role="button" tabindex="0">☆</span>
+      <span class="star" data-rating="2" role="button" tabindex="0">☆</span>
+      <span class="star" data-rating="3" role="button" tabindex="0">☆</span>
+      <span class="star" data-rating="4" role="button" tabindex="0">☆</span>
+      <span class="star" data-rating="5" role="button" tabindex="0">☆</span>
+    </div>
+
+    <div class="rating-display" id="ratingDisplay"></div>
+
+    <div class="rating-actions">
+      <button class="btn-submit-rating" id="submitRatingBtn" style="display: none;">
+        ✓ Submit Rating
+      </button>
+    </div>
+
+    <div class="thank-you-message" id="thankYouMessage">
+      ✓ Thank you for rating!
+    </div>
+  </div>
+
+  <!-- ── Dictionary Meaning Box ─────────────────────────────── -->
+  <div id="meaningBox" aria-live="polite"></div>
+
+  <!-- ── Status Bar ─────────────────────────────────────────── -->
+  <div class="status-bar">
+    <div class="status-dot" id="statusDot"></div>
+    <span id="statusText">Enter a word to get started</span>
+  </div>
+
+</div>
+
+<script>
+  /* ── DOM refs ────────────────────────────────────────────── */
+  const wordInput    = document.getElementById('wordInput');
+  const wordShown    = document.getElementById('wordShown');
+  const speakBtn     = document.getElementById('speakBtn');
+  const clearBtn     = document.getElementById('clearBtn');
+  const voiceSelect  = document.getElementById('voiceSelect');
+  const accentSelect = document.getElementById('accentSelect');
+  const speedRange   = document.getElementById('speedRange');
+  const speedLabel   = document.getElementById('speedLabel');
+  const meaningBox   = document.getElementById('meaningBox');
+  const statusDot    = document.getElementById('statusDot');
+  const statusText   = document.getElementById('statusText');
+  const waveIcon     = document.getElementById('waveIcon');
+
+  /* ── Speech Synthesis setup ──────────────────────────────── */
+  // BUG 6 FIX: Guard against browsers that don't support the Web Speech API
+  // (some mobile browsers, older Safari) — without this the entire script crashes.
+  const synth = window.speechSynthesis || null;
+  let voices  = [];
+
+  if (!synth) {
+    speakBtn.disabled    = true;
+    speakBtn.textContent = '✕ Speech not supported';
+    voiceSelect.innerHTML = '<option>Not supported</option>';
+    setStatus('error', 'Web Speech API not available in this browser');
+  }
+
+  /**
+   * FIX: Robust voice loader.
+   *
+   * ROOT CAUSE OF BUG:
+   * The original code called populateVoices() immediately at page load,
+   * then set onvoiceschanged. On Chrome (and all Chromium-based browsers),
+   * getVoices() returns an EMPTY ARRAY on the first synchronous call —
+   * voices are loaded asynchronously. The onvoiceschanged event fires once
+   * they're ready. On the developer's machine the voices were already cached,
+   * so the synchronous call happened to return them — hiding the bug.
+   *
+   * FIX STRATEGY:
+   * 1. Register onvoiceschanged BEFORE any getVoices() call.
+   * 2. After registering, attempt an immediate load (works on Firefox/Safari
+   *    which return voices synchronously).
+   * 3. Add a polling fallback: some browsers/environments never fire
+   *    onvoiceschanged reliably. Poll every 100 ms for up to 3 seconds,
+   *    stopping as soon as voices appear.
+   */
+  function populateVoices() {
+    const available = synth.getVoices();
+
+    // Guard: don't render an empty list — wait for the next tick/event
+    if (available.length === 0) return;
+
+    voices = available;
+
+    const lang     = accentSelect.value;
+    const filtered = voices.filter(v => v.lang.startsWith(lang.split('-')[0]));
+    const sorted   = [
+      ...filtered.filter(v => v.lang === lang),
+      ...filtered.filter(v => v.lang !== lang),
+    ];
+
+    voiceSelect.innerHTML = '';
+    voiceSelect.classList.remove('loading');
+
+    const listToRender = sorted.length > 0
+      ? sorted
+      : voices.filter(v => v.lang.startsWith('en')); // broad English fallback
+
+    if (listToRender.length === 0) {
+      // Last-resort: show every available voice
+      voices.forEach(addVoiceOption);
+    } else {
+      listToRender.forEach(addVoiceOption);
+    }
+
+    setStatus('ready', 'Ready to speak');
+  }
+
+  function addVoiceOption(v) {
+    const opt       = document.createElement('option');
+    opt.value       = v.name;
+    opt.textContent = `${v.name} (${v.lang})`;
+    voiceSelect.appendChild(opt);
+  }
+
+  /**
+   * FIX: Register the event handler FIRST, then attempt synchronous load,
+   * then start the polling fallback.
+   */
+  function initVoices() {
+    voiceSelect.classList.add('loading');
+
+    // Step 1 — hook the event before anything else
+    if (typeof synth.onvoiceschanged !== 'undefined') {
+      synth.onvoiceschanged = populateVoices;
+    }
+
+    // Step 2 — attempt immediate load (Firefox / Safari)
+    populateVoices();
+
+    // Step 3 — polling fallback (handles Chrome & edge cases where the
+    //           event fires before our handler was registered, or not at all)
+    let attempts = 0;
+    const MAX_ATTEMPTS = 30; // 30 × 100 ms = 3 s
+    const poll = setInterval(() => {
+      attempts++;
+      if (voices.length > 0 || attempts >= MAX_ATTEMPTS) {
+        clearInterval(poll);
+        return;
+      }
+      populateVoices();
+    }, 100);
+  }
+
+  if (synth) initVoices();
+
+  /* ── Speed slider label ──────────────────────────────────── */
+  speedRange.addEventListener('input', () => {
+    const val = parseFloat(speedRange.value);
+    if      (val <= 0.6) speedLabel.textContent = 'Slow';
+    else if (val <= 1.2) speedLabel.textContent = 'Normal';
+    else if (val <= 1.5) speedLabel.textContent = 'Fast';
+    else                 speedLabel.textContent = 'Very Fast';
+  });
+
+  /* ── Accent change → refresh voice list ─────────────────── */
+  accentSelect.addEventListener('change', populateVoices);
+
+  /* ── Word input: live preview ────────────────────────────── */
+  wordInput.addEventListener('input', () => {
+    wordShown.textContent = wordInput.value.trim() || '—';
+  });
+
+  /* ── Press Enter → speak ─────────────────────────────────── */
+  wordInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') speakWord();
+  });
+
+  /* ── Clear button ────────────────────────────────────────── */
+  clearBtn.addEventListener('click', () => {
+    wordInput.value       = '';
+    wordShown.textContent = '—';
+    meaningBox.style.display = 'none';
+    synth.cancel();
+    setStatus('idle', 'Enter a word to get started');
+    wordInput.focus();
+  });
+
+  /* ── Speak button ────────────────────────────────────────── */
+  speakBtn.addEventListener('click', speakWord);
+
+  function speakWord() {
+    if (!synth) return;
+
+    const word = wordInput.value.trim();
+    if (!word) {
+      setStatus('error', 'Please type a word first');
+      wordInput.focus();
+      return;
+    }
+
+    synth.cancel();
+
+    // BUG 2 FIX: Chrome pauses the synth engine when the tab loses focus.
+    // Calling resume() before speak() unblocks it so onstart/onend fire reliably.
+    synth.resume();
+
+    const utterance  = new SpeechSynthesisUtterance(word);
+    utterance.rate   = parseFloat(speedRange.value);
+    utterance.lang   = accentSelect.value;
+
+    const voiceObj = voices.find(v => v.name === voiceSelect.value);
+    if (voiceObj) utterance.voice = voiceObj;
+
+    // BUG 2 FIX: Safety watchdog — if onend never fires (Chrome bug),
+    // re-enable the button after a generous timeout so the UI doesn't lock up.
+    let watchdog;
+
+    utterance.onstart = () => {
+      setStatus('speaking', `Speaking "${word}"…`);
+      waveIcon.classList.remove('idle');
+      speakBtn.disabled = true;
+      watchdog = setTimeout(() => {
+        // Force-reset if the engine silently died
+        waveIcon.classList.add('idle');
+        speakBtn.disabled = false;
+        setStatus('ready', 'Ready to speak');
+      }, 10000); // 10 s ceiling — more than enough for any single word
+    };
+
+    utterance.onend = () => {
+      clearTimeout(watchdog);
+      setStatus('ready', 'Done');
+      waveIcon.classList.add('idle');
+      speakBtn.disabled = false;
+    };
+
+    utterance.onerror = (e) => {
+      clearTimeout(watchdog);
+      // 'interrupted' fires when synth.cancel() is called mid-speech (e.g. user
+      // clicks Speak again) — that's expected, not a real error.
+      if (e.error === 'interrupted') return;
+      setStatus('error', `Speech error: ${e.error}`);
+      waveIcon.classList.add('idle');
+      speakBtn.disabled = false;
+    };
+
+    synth.speak(utterance);
+    fetchMeaning(word);
+  }
+
+  /* ── Status helper ───────────────────────────────────────── */
+  function setStatus(state, msg) {
+    statusText.textContent = msg;
+    statusDot.className    = 'status-dot';
+    if (state === 'speaking') statusDot.classList.add('speaking');
+    if (state === 'ready')    statusDot.classList.add('ready');
+  }
+
+  /* ── Dictionary API ──────────────────────────────────────── */
+
+  /** Helper: create an element, assign a class, set its text, return it. */
+  function el(tag, className, text) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
+  // BUG 1 FIX: Track the active fetch so we can abort it if a new word is
+  // looked up before the previous request completes. Without this, a slow
+  // response for an earlier word can overwrite the result for the current one.
+  let activeFetchController = null;
+
+  async function fetchMeaning(word) {
+    // Cancel any in-flight request
+    if (activeFetchController) activeFetchController.abort();
+    activeFetchController = new AbortController();
+    const signal = activeFetchController.signal;
+
+    // BUG 5 FIX: Re-trigger the fadeUp animation on every lookup.
+    // Simply toggling display: none → block doesn't restart a CSS animation
+    // because the element stays in the DOM. Forcing a reflow between removing
+    // and re-adding the class resets the animation timeline.
+    meaningBox.style.display = 'none';
+    meaningBox.classList.remove('animate');
+    // eslint-disable-next-line no-unused-expressions
+    meaningBox.offsetHeight; // force reflow
+    meaningBox.style.display = 'block';
+    meaningBox.classList.add('animate');
+
+    meaningBox.replaceChildren(el('p', 'm-loading', `Looking up "${word}"…`));
+
+    try {
+      const res  = await fetch(
+        `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`,
+        { signal }
+      );
+      if (!res.ok) throw new Error('not_found');
+      const data = await res.json();
+
+      const entry    = data[0];
+      const phonetic = entry.phonetic || (entry.phonetics.find(p => p.text)?.text) || '';
+
+      const fragment = document.createDocumentFragment();
+      fragment.appendChild(el('div', 'm-word',     entry.word));
+      if (phonetic) fragment.appendChild(el('div', 'm-phonetic', phonetic));
+
+      entry.meanings.slice(0, 3).forEach(m => {
+        const def     = m.definitions[0];
+        const entryEl = el('div', 'meaning-entry');
+        entryEl.appendChild(el('span', 'pos', m.partOfSpeech));
+        entryEl.appendChild(el('div',  'def', def.definition));
+        if (def.example) entryEl.appendChild(el('div', 'example', `"${def.example}"`));
+        fragment.appendChild(entryEl);
+      });
+
+      meaningBox.replaceChildren(fragment);
+
+    } catch (err) {
+      // AbortError just means a newer request took over — not a real error
+      if (err.name === 'AbortError') return;
+
+      const p = el('p', 'm-error');
+      if (err.message === 'not_found') {
+        p.appendChild(document.createTextNode('No definition found for "'));
+        p.appendChild(el('strong', null, word));
+        p.appendChild(document.createTextNode('".'));
+      } else {
+        p.textContent = 'Could not load definition (check your connection).';
+      }
+      meaningBox.replaceChildren(p);
+    }
+  }
+
+  /* ── Initial status ──────────────────────────────────────── */
+  setStatus('idle', 'Enter a word to get started');
+
+  /* ═══════════════════════════════════════════════════════════
+     RATING SYSTEM
+  ═══════════════════════════════════════════════════════════ */
+  const starsContainer   = document.getElementById('starsContainer');
+  const stars            = document.querySelectorAll('.star');
+  const ratingDisplay    = document.getElementById('ratingDisplay');
+  const submitRatingBtn  = document.getElementById('submitRatingBtn');
+  const thankYouMessage  = document.getElementById('thankYouMessage');
+
+  let currentRating = 0;
+  const STORAGE_KEY = 'uccaron_rating';
+
+  // BUG 4 FIX: localStorage throws SecurityError in private/incognito mode on
+  // some browsers. Wrap all access in helpers that silently degrade.
+  function storageGet(key) {
+    try { return localStorage.getItem(key); } catch { return null; }
+  }
+  function storageSet(key, val) {
+    try { localStorage.setItem(key, val); } catch { /* silently ignore */ }
+  }
+
+  function loadRating() {
+    const saved = storageGet(STORAGE_KEY);
+    if (!saved) return;
+
+    // BUG 3 FIX: Validate before using. parseInt returns NaN for corrupted data;
+    // NaN comparisons always return false, silently breaking all star logic.
+    const parsed = parseInt(saved, 10);
+    if (Number.isInteger(parsed) && parsed >= 1 && parsed <= 5) {
+      currentRating = parsed;
+      updateStarDisplay();
+      updateRatingText();
+    }
+  }
+
+  function saveRating() {
+    if (currentRating > 0) storageSet(STORAGE_KEY, currentRating.toString());
+  }
+
+  function updateStarDisplay() {
+    stars.forEach((star, index) => {
+      const starNum = index + 1;
+      if (starNum <= currentRating) {
+        star.textContent = '★';
+        star.classList.add('active');
+      } else {
+        star.textContent = '☆';
+        star.classList.remove('active');
+      }
+    });
+  }
+
+  function updateRatingText() {
+    if (currentRating > 0) {
+      ratingDisplay.textContent = `You rated: ${currentRating}/5`;
+      ratingDisplay.classList.remove('hidden');
+      submitRatingBtn.style.display = 'inline-block';
+    } else {
+      ratingDisplay.textContent = '';
+      ratingDisplay.classList.add('hidden');
+      submitRatingBtn.style.display = 'none';
+      thankYouMessage.classList.remove('show');
+    }
+  }
+
+  function handleStarClick(e) {
+    const star = e.target.closest('.star');
+    if (!star) return;
+    currentRating = parseInt(star.dataset.rating, 10);
+    updateStarDisplay();
+    updateRatingText();
+  }
+
+  function handleStarHover(e) {
+    const star = e.target.closest('.star');
+    if (!star) return;
+    const hoverRating = parseInt(star.dataset.rating, 10);
+    stars.forEach((s, index) => {
+      s.textContent = (index + 1) <= hoverRating ? '★'
+        : currentRating >= (index + 1) ? '★' : '☆';
+    });
+  }
+
+  function handleStarLeave() { updateStarDisplay(); }
+
+  function handleSubmitRating() {
+    saveRating();
+    thankYouMessage.classList.add('show');
+    submitRatingBtn.textContent  = '✓ Rating Saved';
+    submitRatingBtn.style.opacity = '0.6';
+    submitRatingBtn.disabled      = true;
+    setTimeout(() => {
+      thankYouMessage.classList.remove('show');
+      submitRatingBtn.textContent   = '✓ Submit Rating';
+      submitRatingBtn.style.opacity = '1';
+      submitRatingBtn.disabled      = false;
+    }, 3000);
+  }
+
+  function handleStarKeydown(e) {
+    const star = e.target.closest('.star');
+    if (!star) return;
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      currentRating = parseInt(star.dataset.rating, 10);
+      updateStarDisplay();
+      updateRatingText();
+    }
+  }
+
+  starsContainer.addEventListener('click',      handleStarClick);
+  starsContainer.addEventListener('mouseover',  handleStarHover);
+  starsContainer.addEventListener('mouseleave', handleStarLeave);
+  starsContainer.addEventListener('keydown',    handleStarKeydown);
+  submitRatingBtn.addEventListener('click',     handleSubmitRating);
+
   loadRating();
 </script>
 
