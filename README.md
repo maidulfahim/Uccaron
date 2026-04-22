@@ -14,7 +14,7 @@ A modern, interactive text-to-speech web application with a sleek dark theme and
 
 ##  Live Demo
 
-Visit the application here: **[uccaron.netlify.app](ornate-lamington-b6e322.netlify.app)**
+Visit the application here: **[ornate-lamington-b6e322.netlify.app](ornate-lamington-b6e322.netlify.app)**
 
 ## 💻 Getting Started
 
