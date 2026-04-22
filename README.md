@@ -14,7 +14,7 @@ A modern, interactive text-to-speech web application with a sleek dark theme and
 
 ##  Live Demo
 
-Visit the application here: **[uccaron.netlify.app](https://uccaron.netlify.app)**
+Visit the application here: **[uccaron.netlify.app](ornate-lamington-b6e322.netlify.app)**
 
 ## 💻 Getting Started
 
@@ -51,7 +51,7 @@ Visit the application here: **[uccaron.netlify.app](https://uccaron.netlify.app)
 
 ##  Deployment
 
-This project is deployed on **Netlify** at [uccaron.netlify.app](https://uccaron.netlify.app)
+This project is deployed on **Netlify** at [uccaron.netlify.app](ornate-lamington-b6e322.netlify.app)
 
 ##  Contributing
 
@@ -67,4 +67,4 @@ This project is open source and available under the MIT License.
 
 ---
 
-**Try it now**: [uccaron.netlify.app](https://uccaron.netlify.app)
+**Try it now**: [uccaron.netlify.app](ornate-lamington-b6e322.netlify.app)
