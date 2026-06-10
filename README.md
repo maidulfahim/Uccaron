@@ -12,9 +12,7 @@ A modern, interactive text-to-speech web application with a sleek dark theme and
 - **Responsive Design**: Works seamlessly on desktop and mobile devices
 - **Easy to Use**: Simple input field and intuitive controls
 
-##  Live Demo
 
-Visit the application here: **[ornate-lamington-b6e322.netlify.app](ornate-lamington-b6e322.netlify.app)**
 
 ## 💻 Getting Started
 
@@ -49,9 +47,9 @@ Visit the application here: **[ornate-lamington-b6e322.netlify.app](ornate-lamin
 - **Smooth Transitions**: Polished interactions and hover effects
 - **Grid Background**: Subtle texture for visual depth
 
-##  Deployment
 
-This project is deployed on **Netlify** at [uccaron.netlify.app](ornate-lamington-b6e322.netlify.app)
+
+
 
 ##  Contributing
 
@@ -67,4 +65,4 @@ This project is open source and available under the MIT License.
 
 ---
 
-**Try it now**: [uccaron.netlify.app](ornate-lamington-b6e322.netlify.app)
+
